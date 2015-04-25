@@ -1,0 +1,46 @@
+   
+   
+	*** Zapuc Ileana Alexandra 331CA ***
+	Computer Systems Architecture Course
+
+    Faculty of Automatic Control and Computers, 
+    University Politehnica of Bucharest
+
+    Assignment 1 - Cluster Activity Simulation
+    March 2015
+
+    
+
+   node.py
+--------------
+
+	In the constructor of the class node, a function is called to create and
+start 16 threads per node.
+	Because the data is partitioned and a node must communicate with other
+nodes if it needs data, a buffer of data is used for gather operations
+so that in one round every node can read from another node's buffer data
+and do the computations it has to do.
+	The tasks that are received by a node are stored in a sinchronized
+queue. A thread takes a task from queue(if there is one) or blocks until
+a task is added.
+	When there are no tasks in queue to be processed, each node has to wait
+until the others have finished their tasks and after that buffer data is 
+updated with the results of the scatter operations.
+
+
+  threads.py
+--------------
+
+	Each thread tries to get a task. If there is no task in the nodes's queue
+the current thread waits until a task is available.
+	For each tuple in in_slices, the thread gathers the data from another
+node and extends result list with the one he obtained.
+	After the computations made on result list, the threads starts to scatter
+the data. A thread ca scatter the result because a buffer of the initial data
+is used if another thread wants to gather data.
+
+
+ barrier.py
+-------------
+
+	This barrier is used to sinchronize the nodes.
